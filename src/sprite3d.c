@@ -120,7 +120,7 @@ int sprite_init(sprite3d * sprite, char * filename){
             case decode_facet:
                 
 
-                fscanf(fptr, " %s %s %s\n", xbuf, ybuf, zbuf);
+                fscanf(fptr, " %s %s %s", xbuf, ybuf, zbuf);
                 //printf("%s %s %s\n", xbuf, ybuf, zbuf);
                 
                 char * bufs[3]; bufs[0] = xbuf; bufs[1] = ybuf; bufs[2] = zbuf;
@@ -138,8 +138,10 @@ int sprite_init(sprite3d * sprite, char * filename){
 
                 // Store the facet information
                 for (unsigned int i=0; i<3; i++){
-                    sprite->facets[f_i][i] = atof(bufs[i]);
+                    printf("%d ", atoi(bufs[i]));
+                    sprite->facets[f_i][i] = atoi(bufs[i]);
                 }
+                printf("\n");
                 
                 // Increment location of next facet 
                f_i++;
@@ -154,6 +156,7 @@ int sprite_init(sprite3d * sprite, char * filename){
     // Finished parsing, test reading some values 
     
     printf("Vertex count after finished %d\n",v_i);
+    printf("Facet count after finished %d\n",f_i);
     fclose(fptr);
 
     return 0;
@@ -185,11 +188,15 @@ void print_sprite3d(sprite3d * sprite){
 
 int sprite_delete(sprite3d * sprite){
     
-    unsigned int n_v = sprite->vertex_count;
-
-    for (unsigned int i=0; i<n_v; i++){
+    for (unsigned int i=0; i<sprite->vertex_count; i++){
         free(sprite->vertices[i]);
     }
     
     free(sprite->vertices);
+    
+    for (unsigned int i=0; i<sprite->facet_count; i++){
+        free(sprite->facets[i]);
+    }
+    
+    free(sprite->facets);
 }
