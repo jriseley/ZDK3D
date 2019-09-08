@@ -159,6 +159,11 @@ int sprite_init(sprite3d * sprite, char * filename){
     printf("Facet count after finished %d\n",f_i);
     fclose(fptr);
 
+    
+    // Set up transformation matrix
+    sprite->frame.x = 0;  sprite->frame.y = 0; sprite->frame.z = 0;
+     sprite->frame.a = 0;  sprite->frame.b = 0; sprite->frame.g = 0;
+        
     return 0;
 }
 
@@ -167,18 +172,22 @@ int sprite_init(sprite3d * sprite, char * filename){
 
 void print_sprite3d(sprite3d * sprite){
     unsigned int n = sprite->vertex_count;    
-    printf("Sprite with %d vertices\n",sprite->vertex_count);
+    printf("\nSprite with %d vertices\n",sprite->vertex_count);
     printf("\t%f %f %f,\n",sprite->vertices[0][0],sprite->vertices[0][1],sprite->vertices[0][2]);
-    printf("\t%f %f %f \n\t...\n",sprite->vertices[1][0],sprite->vertices[1][1],sprite->vertices[1][2]);
-    printf("\t%f %f %f \n",sprite->vertices[n-2][0],sprite->vertices[n-2][1],sprite->vertices[n-2][2]);
+    printf("\t%f %f %f, \n\t...\n",sprite->vertices[1][0],sprite->vertices[1][1],sprite->vertices[1][2]);
+    printf("\t%f %f %f, \n",sprite->vertices[n-2][0],sprite->vertices[n-2][1],sprite->vertices[n-2][2]);
     printf("\t%f %f %f \n",sprite->vertices[n-1][0],sprite->vertices[n-1][1],sprite->vertices[n-1][2]);
     
     n = sprite->facet_count;    
     printf("Sprite with %d facets\n",sprite->facet_count);
     printf("\t%d %d %d,\n",sprite->facets[0][0],sprite->facets[0][1],sprite->facets[0][2]);
-    printf("\t%d %d %d \n\t...\n",sprite->facets[1][0],sprite->facets[1][1],sprite->facets[1][2]);
-    printf("\t%d %d %d \n",sprite->facets[n-2][0],sprite->facets[n-2][1],sprite->facets[n-2][2]);
+    printf("\t%d %d %d, \n\t...\n",sprite->facets[1][0],sprite->facets[1][1],sprite->facets[1][2]);
+    printf("\t%d %d %d, \n",sprite->facets[n-2][0],sprite->facets[n-2][1],sprite->facets[n-2][2]);
     printf("\t%d %d %d \n",sprite->facets[n-1][0],sprite->facets[n-1][1],sprite->facets[n-1][2]);
+    
+    printf("Current reference frame location:\n");
+    printf("\t(x,y,z) = %f,%f,%f\n",sprite->frame.x, sprite->frame.y,sprite->frame.z);
+    printf("\t(alpha,beta,gamma) = %f,%f,%f\n",sprite->frame.a, sprite->frame.b,sprite->frame.g);
     
     // TODO FACETS
     return;

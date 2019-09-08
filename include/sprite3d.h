@@ -8,14 +8,14 @@
 
 #include "sprite3d.h"
 #include "string.h"
-
+#include "coordsys.h"
 
 typedef struct {
     double ** vertices; // points of a vertex in local coord frame 
     unsigned int vertex_count;
     unsigned int ** facets; // a facet references the indices of vertices. Only supports triangular facets.
     unsigned int facet_count; 
-    // TODO transformation matrix 
+    coordsys frame; // TODO transformation matrix 
     // TODO velocity 
 } sprite3d;
 

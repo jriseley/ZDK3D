@@ -187,5 +187,19 @@ for j=0:0.1:2*pi
     
 end
 
-%%
+%% 4x4 matrix product
+syms a b c d e f g h i j k l m n o p q r s t u v w x y z a2 b2 c2 d2 e2 ;
+
+A = [a b c d;
+    e f g h;
+    i j k l;
+    l m n o];
+
+B = [p q r s;
+    t u v w;
+    x y z a2;
+    b2 c2 d2 e2];
+
+A*B
+
 
