@@ -21,7 +21,7 @@ ref_frame * init_ref_frame(void);
 // Release the memory held by a reference frame 
 int free_ref_frame(ref_frame * frame);
 
-// Move the reference frame by x,y,z metres and a,b,gamma degrees.
+// Move the reference frame by x,y,z metres and pitch, roll, yaw degrees.
 void transform_frame(ref_frame * frame, double x, double y, double z, double a, double b, double g);
 
 // Take the point (x,y,z) in the reference frame 'frame' and put it into the world frame.

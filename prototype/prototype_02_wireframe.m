@@ -203,8 +203,9 @@ A*B
 
 %% Figure out the transformation of taking one frame and
 % translating it x, y, z and rotating a, b g
+% translating it x, y, z and rotating a, b g
 clear all
-syms a b g x y z
+syms b a g x y z
 syms T00 T01 T02 T03 T10 T11 T12 T13 T20 T21 T22 T23;
 % The original ref frame
 A = [T00 T01 T02 T03;
@@ -213,19 +214,19 @@ A = [T00 T01 T02 T03;
     0 0 0 1];
 
 % The transformation to do
-T = [-sin(b)*sin(a)*cos(g) + cos(b)*sin(g), sin(b)*sin(a)*sin(g) + cos(b)*cos(g), sin(b)*cos(a), x;
-        cos(b)*sin(a)*cos(g) + sin(b)*sin(g), -cos(b)*sin(a)*sin(g)+sin(b)*cos(g), -cos(b)*cos(a), y;
-        -cos(a)*cos(g), cos(a)*sin(g), -sin(a), z;
-        0, 0, 0, 1];
+T = [cos(a)*cos(b), cos(a)*sin(b)*sin(g) - sin(a)*cos(g), cos(a)*sin(b)*cos(g)+sin(a)*sin(g), x;
+    sin(a)*cos(b), sin(a)*sin(b)*sin(g) + cos(a)*cos(g), sin(a)*sin(b)*cos(g) - cos(a)*sin(g), y;
+    -sin(b), cos(b)*sin(g), cos(b)*cos(g), z;
+    0 0 0 1];
     
-result = A*T;
+result = A*T
 
 for i=1:3
     for j=1:4
+        fprintf("T_[%d][%d] = ",i-1,j-1);
         disp(result(i,j))
     end
 end
-
 %% Get the expression for a point in a new ref frame
 clear all
 syms a b g x y z
@@ -241,33 +242,32 @@ result = A*X
 
 %% Get expression for matrix that does nothing
 clear all
+clc
 x = 0; y = 0; z = 0;
 a = 0; b = 0; g= 0;
-
-A0 = [-sin(b)*sin(a)*cos(g) + cos(b)*sin(g), sin(b)*sin(a)*sin(g) + cos(b)*cos(g), sin(b)*cos(a), x;
-        cos(b)*sin(a)*cos(g) + sin(b)*sin(g), -cos(b)*sin(a)*sin(g)+sin(b)*cos(g), -cos(b)*cos(a), y;
-        -cos(a)*cos(g), cos(a)*sin(g), -sin(a), z;
-        0, 0, 0, 1]
     
-% Translate it
-x = 1; y = 1; z = 10;
-a = 0; b = 0; g= 0;
+A0 = [cos(a)*cos(b), cos(a)*sin(b)*sin(g) - sin(a)*cos(g), cos(a)*sin(b)*cos(g)+sin(a)*sin(g), x;
+    sin(a)*cos(b), sin(a)*sin(b)*sin(g) + cos(a)*cos(g), sin(a)*sin(b)*cos(g) - cos(a)*sin(g), y;
+    -sin(b), cos(b)*sin(g), cos(b)*cos(g), z;
+    0 0 0 1]
 
-A1 = [-sin(b)*sin(a)*cos(g) + cos(b)*sin(g), sin(b)*sin(a)*sin(g) + cos(b)*cos(g), sin(b)*cos(a), x;
-        cos(b)*sin(a)*cos(g) + sin(b)*sin(g), -cos(b)*sin(a)*sin(g)+sin(b)*cos(g), -cos(b)*cos(a), y;
-        -cos(a)*cos(g), cos(a)*sin(g), -sin(a), z;
-        0, 0, 0, 1];
+x = 1; y = 1; z= 15;
     
-A1*A0
+T =  [cos(a)*cos(b), cos(a)*sin(b)*sin(g) - sin(a)*cos(g), cos(a)*sin(b)*cos(g)+sin(a)*sin(g), x;
+    sin(a)*cos(b), sin(a)*sin(b)*sin(g) + cos(a)*cos(g), sin(a)*sin(b)*cos(g) - cos(a)*sin(g), y;
+    -sin(b), cos(b)*sin(g), cos(b)*cos(g), z;
+    0 0 0 1]
+    
+A0 = A0*T
+for i=1:10
+x = 0.05; y = 0.05; z = 0.0;
+%a = pi/30; b = pi/30; g= pi/30;
+a = 0; b =0; g= 0;
+T=[cos(a)*cos(b), cos(a)*sin(b)*sin(g) - sin(a)*cos(g), cos(a)*sin(b)*cos(g)+sin(a)*sin(g), x;
+    sin(a)*cos(b), sin(a)*sin(b)*sin(g) + cos(a)*cos(g), sin(a)*sin(b)*cos(g) - cos(a)*sin(g), y;
+    -sin(b), cos(b)*sin(g), cos(b)*cos(g), z;
+    0 0 0 1];
 
-% Rotate it
+A0 = A0*T
 
-x = 0; y = 0; z = 0;
-a = 0.1; b = 0.1; g= 0.1;
-
-A2 = [-sin(b)*sin(a)*cos(g) + cos(b)*sin(g), sin(b)*sin(a)*sin(g) + cos(b)*cos(g), sin(b)*cos(a), x;
-        cos(b)*sin(a)*cos(g) + sin(b)*sin(g), -cos(b)*sin(a)*sin(g)+sin(b)*cos(g), -cos(b)*cos(a), y;
-        -cos(a)*cos(g), cos(a)*sin(g), -sin(a), z;
-        0, 0, 0, 1];
-
-(A1*A0)*A2
+end

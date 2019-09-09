@@ -5,7 +5,7 @@
 #include "cab202_graphics.h"
 #include "cab202_timers.h"
 
-#define PIX_PER_M (30)
+#define PIX_PER_M (15)
 
 
 int main(int argc, char ** argv){
@@ -15,10 +15,10 @@ int main(int argc, char ** argv){
     // Create a sprite3d
     sprite3d sprite; 
     sprite_init(&sprite, "/home/jenna/ZDK3D/mesh/Arwing_001.obj");
+     print_sprite3d(&sprite);
     
     // Move the sprite TODO add wrapper function
-    transform_frame(sprite.frame, 1, 1, 15, M_PI, -M_PI/2.0, M_PI/2.0);
-     //transform_frame(sprite.frame, 0, 0, 0, 0.01, 0.01, 0.01);
+    transform_frame(sprite.frame, 10,0,15,0.1, M_PI, -M_PI/2.0);
     
     print_sprite3d(&sprite);
     
@@ -33,11 +33,13 @@ int main(int argc, char ** argv){
    double f0 = 5.0; // distance from world reference frame to image plane
    
    // Scroll thru some values
-   for (unsigned int k=0; k<2; k++){
-   clear_screen();
+   for (unsigned int k=0; k<100; k++){
+   
+       clear_screen();
 
-       
-       
+    transform_frame(sprite.frame, 0, 0, -0.5, 0, 0.05, 0.0);   
+   // print_sprite3d(&sprite);
+    
    // For each facet in the sprite...
    for(unsigned int i=0; i<sprite.facet_count; i++){
    
@@ -73,20 +75,21 @@ int main(int argc, char ** argv){
             //printf("(%d,%d)-->(%d,%d)\n",v1x_,v1y_,v2x_,v2y_);
             
             // Draw a line between these two coords in the screen buffer.
-            draw_line(v1x_, v1y_, v2x_, v2y_, '*');
+            // TODO CHECK IF IN SCREEN 
+            draw_line(v1x_, v1y_, v2x_, v2y_, '~');
        }
    }
+   
    
 
   show_screen();
    
-    timer_pause(1000);
-    
+    timer_pause(50);
+   
    } // end loop over angles
    
+   
     sprite_delete(&sprite);
-    
-    
     
     return 0;   
  

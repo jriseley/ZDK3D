@@ -15,9 +15,9 @@ ref_frame * init_ref_frame(void){
     }
         
     // Set the ref frame to neutral (no translation or rotation)
-     frame->transform[0][1] =1;
-     frame->transform[1][2] = -1;
-     frame->transform[2][0] = -1;
+     frame->transform[0][0] =1;
+     frame->transform[1][1] = 1;
+     frame->transform[2][2] = 1;
     
     return frame;
 }
@@ -33,26 +33,44 @@ void transform_frame(ref_frame * frame, double x, double y, double z, double a, 
     
     // Get a temporary transformation matrix  
     T_mat T_ = calloc(3,sizeof(double *));
-    for (unsigned int i=0; i<4; i++){
-        T_[i] = calloc(1,sizeof(double));
+    for (unsigned int i=0; i<3; i++){
+        T_[i] = calloc(4,sizeof(double));
     }
     
     T_mat T = frame->transform;
     
-   T_[0][0] = T[0][0]*(cos(b)*sin(g) - cos(g)*sin(a)*sin(b)) + T[1][0]*(cos(b)*cos(g) + sin(a)*sin(b)*sin(g)) + T[2][0]*cos(a)*sin(b);
-   T_[0][1] = T[0][1]*(cos(b)*sin(g) - cos(g)*sin(a)*sin(b)) + T[1][1]*(cos(b)*cos(g) + sin(a)*sin(b)*sin(g)) + T[2][1]*cos(a)*sin(b);
-   T_[0][2] = T[0][2]*(cos(b)*sin(g) - cos(g)*sin(a)*sin(b)) + T[1][2]*(cos(b)*cos(g) + sin(a)*sin(b)*sin(g)) + T[2][2]*cos(a)*sin(b);
-   T_[0][3] =  x + T[0][3]*(cos(b)*sin(g) - cos(g)*sin(a)*sin(b)) + T[1][3]*(cos(b)*cos(g) + sin(a)*sin(b)*sin(g)) + T[2][3]*cos(a)*sin(b);
-   
-   T_[1][0] = T[0][0]*(sin(b)*sin(g) + cos(b)*cos(g)*sin(a)) + T[1][0]*(cos(g)*sin(b) - cos(b)*sin(a)*sin(g)) - T[2][0]*cos(a)*cos(b);
-   T_[1][1] = T[0][1]*(sin(b)*sin(g) + cos(b)*cos(g)*sin(a)) + T[1][1]*(cos(g)*sin(b) - cos(b)*sin(a)*sin(g)) - T[2][1]*cos(a)*cos(b);
-   T_[1][2] = T[0][2]*(sin(b)*sin(g) + cos(b)*cos(g)*sin(a)) + T[1][2]*(cos(g)*sin(b) - cos(b)*sin(a)*sin(g)) - T[2][2]*cos(a)*cos(b);
-   T_[1][3] = y + T[0][3]*(sin(b)*sin(g) + cos(b)*cos(g)*sin(a)) + T[1][3]*(cos(g)*sin(b) - cos(b)*sin(a)*sin(g)) - T[2][3]*cos(a)*cos(b);
-   
-   T_[2][0] = T[1][0]*cos(a)*sin(g) - T[0][0]*cos(a)*cos(g) - T[2][0]*sin(a);
-   T_[2][1] = T[1][1]*cos(a)*sin(g) - T[0][1]*cos(a)*cos(g) - T[2][1]*sin(a);
-   T_[2][2] = T[1][2]*cos(a)*sin(g) - T[0][2]*cos(a)*cos(g) - T[2][2]*sin(a);
-   T_[2][3] = z - T[2][3]*sin(a) - T[0][3]*cos(a)*cos(g) + T[1][3]*cos(a)*sin(g);
+    /*
+    T_[0][0] = T[0][0]*cos(a)*cos(b) - T[0][2]*sin(b) + T[0][1]*cos(b)*sin(a);
+    T_[0][1] = T[0][1]*(cos(a)*cos(g) + sin(a)*sin(b)*sin(g)) - T[0][0]*(cos(g)*sin(a) - cos(a)*sin(b)*sin(g)) + T[0][2]*cos(b)*sin(g);
+    T_[0][2] = T[0][0]*(sin(a)*sin(g) + cos(a)*cos(g)*sin(b)) - T[0][1]*(cos(a)*sin(g) - cos(g)*sin(a)*sin(b)) + T[0][2]*cos(b)*cos(g);
+    T_[0][3] = T[0][3] + T[0][0]*x + T[0][1]*y + T[0][2]*z;
+    
+    T_[1][0] = T[1][0]*cos(a)*cos(b) - T[1][2]*sin(b) + T[1][1]*cos(b)*sin(a);
+    T_[1][1] = T[1][1]*(cos(a)*cos(g) + sin(a)*sin(b)*sin(g)) - T[1][0]*(cos(g)*sin(a) - cos(a)*sin(b)*sin(g)) + T[1][2]*cos(b)*sin(g);
+    T_[1][2] = T[1][0]*(sin(a)*sin(g) + cos(a)*cos(g)*sin(b)) - T[1][1]*(cos(a)*sin(g) - cos(g)*sin(a)*sin(b)) + T[1][2]*cos(b)*cos(g);
+    T_[1][3] = T[1][3] + T[1][0]*x + T[1][1]*y + T[1][2]*z;
+    
+    T_[2][0] = T[2][0]*cos(a)*cos(b) - T[2][2]*sin(b) + T[2][1]*cos(b)*sin(a);
+    T_[2][1] = T[2][1]*(cos(a)*cos(g) + sin(a)*sin(b)*sin(g)) - T[2][0]*(cos(g)*sin(a) - cos(a)*sin(b)*sin(g)) + T[2][2]*cos(b)*sin(g);
+    T_[2][2] = T[2][0]*(sin(a)*sin(g) + cos(a)*cos(g)*sin(b)) - T[2][1]*(cos(a)*sin(g) - cos(g)*sin(a)*sin(b)) + T[2][2]*cos(b)*cos(g);
+    T_[2][3] = T[2][3] + T[2][0]*x + T[2][1]*y + T[2][2]*z;
+*/
+        T_[0][0] = T[0][0]*cos(b)*cos(g) - T[0][2]*sin(g) + T[0][1]*cos(g)*sin(b);
+    T_[0][1] = T[0][1]*(cos(b)*cos(a) + sin(b)*sin(g)*sin(a)) - T[0][0]*(cos(a)*sin(b) - cos(b)*sin(g)*sin(a)) + T[0][2]*cos(g)*sin(a);
+    T_[0][2] = T[0][0]*(sin(b)*sin(a) + cos(b)*cos(a)*sin(g)) - T[0][1]*(cos(b)*sin(a) - cos(a)*sin(b)*sin(g)) + T[0][2]*cos(g)*cos(a);
+    T_[0][3] = T[0][3] + T[0][0]*x + T[0][1]*y + T[0][2]*z;
+    
+    T_[1][0] = T[1][0]*cos(b)*cos(g) - T[1][2]*sin(g) + T[1][1]*cos(g)*sin(b);
+    T_[1][1] = T[1][1]*(cos(b)*cos(a) + sin(b)*sin(g)*sin(a)) - T[1][0]*(cos(a)*sin(b) - cos(b)*sin(g)*sin(a)) + T[1][2]*cos(g)*sin(a);
+    T_[1][2] = T[1][0]*(sin(b)*sin(a) + cos(b)*cos(a)*sin(g)) - T[1][1]*(cos(b)*sin(a) - cos(a)*sin(b)*sin(g)) + T[1][2]*cos(g)*cos(a);
+    T_[1][3] = T[1][3] + T[1][0]*x + T[1][1]*y + T[1][2]*z;
+    
+    T_[2][0] = T[2][0]*cos(b)*cos(g) - T[2][2]*sin(g) + T[2][1]*cos(g)*sin(b);
+    T_[2][1] = T[2][1]*(cos(b)*cos(a) + sin(b)*sin(g)*sin(a)) - T[2][0]*(cos(a)*sin(b) - cos(b)*sin(g)*sin(a)) + T[2][2]*cos(g)*sin(a);
+    T_[2][2] = T[2][0]*(sin(b)*sin(a) + cos(b)*cos(a)*sin(g)) - T[2][1]*(cos(b)*sin(a) - cos(a)*sin(b)*sin(g)) + T[2][2]*cos(g)*cos(a);
+    T_[2][3] = T[2][3] + T[2][0]*x + T[2][1]*y + T[2][2]*z;
+
+ 
    
    // Copy result into T
    
@@ -64,7 +82,10 @@ void transform_frame(ref_frame * frame, double x, double y, double z, double a, 
    
    // Release temporary transform 
    // TODO?  This causes segfault, why?
-   //free(T_);
+       for (unsigned int i=0; i<3; i++){
+        free(T_[i]);
+    }
+    
     
     return;
 }
