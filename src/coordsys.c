@@ -29,7 +29,6 @@ int free_ref_frame(ref_frame * frame){
 }
 
 
-
 void transform_frame(ref_frame * frame, double x, double y, double z, double a, double b, double g){
     
     // Get a temporary transformation matrix  

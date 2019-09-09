@@ -203,20 +203,28 @@ A*B
 
 %% Figure out the transformation of taking one frame and
 % translating it x, y, z and rotating a, b g
-
+clear all
 syms a b g x y z
 syms T00 T01 T02 T03 T10 T11 T12 T13 T20 T21 T22 T23;
+% The original ref frame
 A = [T00 T01 T02 T03;
     T10 T11 T12 T13;
     T20 T21 T22 T23;
     0 0 0 1];
 
+% The transformation to do
 T = [-sin(b)*sin(a)*cos(g) + cos(b)*sin(g), sin(b)*sin(a)*sin(g) + cos(b)*cos(g), sin(b)*cos(a), x;
         cos(b)*sin(a)*cos(g) + sin(b)*sin(g), -cos(b)*sin(a)*sin(g)+sin(b)*cos(g), -cos(b)*cos(a), y;
         -cos(a)*cos(g), cos(a)*sin(g), -sin(a), z;
         0, 0, 0, 1];
     
-result = T*A;
+result = A*T;
+
+for i=1:3
+    for j=1:4
+        disp(result(i,j))
+    end
+end
 
 %% Get the expression for a point in a new ref frame
 clear all
@@ -229,3 +237,37 @@ A = [T00 T01 T02 T03;
 X = [x; y; z; 1];
 
 result = A*X
+
+
+%% Get expression for matrix that does nothing
+clear all
+x = 0; y = 0; z = 0;
+a = 0; b = 0; g= 0;
+
+A0 = [-sin(b)*sin(a)*cos(g) + cos(b)*sin(g), sin(b)*sin(a)*sin(g) + cos(b)*cos(g), sin(b)*cos(a), x;
+        cos(b)*sin(a)*cos(g) + sin(b)*sin(g), -cos(b)*sin(a)*sin(g)+sin(b)*cos(g), -cos(b)*cos(a), y;
+        -cos(a)*cos(g), cos(a)*sin(g), -sin(a), z;
+        0, 0, 0, 1]
+    
+% Translate it
+x = 1; y = 1; z = 10;
+a = 0; b = 0; g= 0;
+
+A1 = [-sin(b)*sin(a)*cos(g) + cos(b)*sin(g), sin(b)*sin(a)*sin(g) + cos(b)*cos(g), sin(b)*cos(a), x;
+        cos(b)*sin(a)*cos(g) + sin(b)*sin(g), -cos(b)*sin(a)*sin(g)+sin(b)*cos(g), -cos(b)*cos(a), y;
+        -cos(a)*cos(g), cos(a)*sin(g), -sin(a), z;
+        0, 0, 0, 1];
+    
+A1*A0
+
+% Rotate it
+
+x = 0; y = 0; z = 0;
+a = 0.1; b = 0.1; g= 0.1;
+
+A2 = [-sin(b)*sin(a)*cos(g) + cos(b)*sin(g), sin(b)*sin(a)*sin(g) + cos(b)*cos(g), sin(b)*cos(a), x;
+        cos(b)*sin(a)*cos(g) + sin(b)*sin(g), -cos(b)*sin(a)*sin(g)+sin(b)*cos(g), -cos(b)*cos(a), y;
+        -cos(a)*cos(g), cos(a)*sin(g), -sin(a), z;
+        0, 0, 0, 1];
+
+(A1*A0)*A2
