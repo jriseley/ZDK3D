@@ -14,7 +14,10 @@ ref_frame * init_ref_frame(void){
         frame->transform[i] = calloc(1,sizeof(double));
     }
         
-    
+    // Set the ref frame to neutral (no translation or rotation)
+     frame->transform[0][1] =1;
+     frame->transform[1][2] = -1;
+     frame->transform[2][0] = -1;
     
     return frame;
 }

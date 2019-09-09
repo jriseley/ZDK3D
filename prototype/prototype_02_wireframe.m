@@ -19,8 +19,7 @@ obj = readObj("Arwing_001.obj");
 %       : obj.vn - normal coordinates
 %       : obj.f - face definition assuming faces are made of of 3 vertices
 
-%%
-
+%
 % Simple case to start with - just try and draw every vertex in the
 % image plane.
 
