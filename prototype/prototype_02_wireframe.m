@@ -202,4 +202,31 @@ B = [p q r s;
 
 A*B
 
+%% Figure out the transformation of taking one frame and
+% translating it x, y, z and rotating a, b g
 
+syms a b g x y z
+syms T00 T01 T02 T03 T10 T11 T12 T13 T20 T21 T22 T23;
+A = [T00 T01 T02 T03;
+    T10 T11 T12 T13;
+    T20 T21 T22 T23;
+    0 0 0 1];
+
+T = [-sin(b)*sin(a)*cos(g) + cos(b)*sin(g), sin(b)*sin(a)*sin(g) + cos(b)*cos(g), sin(b)*cos(a), x;
+        cos(b)*sin(a)*cos(g) + sin(b)*sin(g), -cos(b)*sin(a)*sin(g)+sin(b)*cos(g), -cos(b)*cos(a), y;
+        -cos(a)*cos(g), cos(a)*sin(g), -sin(a), z;
+        0, 0, 0, 1];
+    
+result = T*A;
+
+%% Get the expression for a point in a new ref frame
+clear all
+syms a b g x y z
+syms T00 T01 T02 T03 T10 T11 T12 T13 T20 T21 T22 T23;
+A = [T00 T01 T02 T03;
+    T10 T11 T12 T13;
+    T20 T21 T22 T23;
+    0 0 0 1];
+X = [x; y; z; 1];
+
+result = A*X

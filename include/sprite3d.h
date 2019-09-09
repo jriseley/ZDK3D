@@ -15,8 +15,7 @@ typedef struct {
     unsigned int vertex_count;
     unsigned int ** facets; // a facet references the indices of vertices. Only supports triangular facets.
     unsigned int facet_count; 
-    coordsys frame; // TODO transformation matrix 
-    // TODO velocity 
+    ref_frame * frame; // reference frame of sprite 
 } sprite3d;
 
 // State machine for obj parser
